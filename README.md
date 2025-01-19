@@ -42,7 +42,7 @@ Pipe Network 通过两层节点系统将去中心化内容交付提升到新的�
 
 1. 克隆本仓库：
    ```bash
-   git clone git@github.com:0xbaiwan/pipe_bot.git
+   git clone https://github.com/0xbaiwan/pipe_bot
    cd pipe_bot
    ```
 
