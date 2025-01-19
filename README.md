@@ -1,60 +1,71 @@
-# Pipe Network Guardian
+# Pipe Network 守护节点
 
-Pipe Network | The decentralized CDN redefining data delivery 🌍 | Faster bandwidth, lower latency ⚡ | Built on @Solana [https://pipecdn.app](https://pipecdn.app/signup?ref=bml1YWdyb0)
-Pipe Network is taking decentralized content delivery to the next level with a two-tier node system that ensures high performance and reliability. PoP Nodes and Guardian Nodes. 🖥️📊
+Pipe Network | 重新定义数据交付的去中心化CDN 🌍 | 更快的带宽，更低的延迟 ⚡ | 基于 @Solana [https://pipecdn.app](https://pipecdn.app/signup?ref=bWVuZ2Nob2)
 
-## and what we running here is Guardian Nodes📊
+Pipe Network 通过两层节点系统将去中心化内容交付提升到新的水平，确保高性能和可靠性。PoP 节点和守护节点。🖥️📊
+
+## 这里运行的是守护节点📊
 
 ![pipe-network](image-1.png)
 
-## Guardian Nodes 🛡️
+## 守护节点 🛡️
 
-Sitting above the PoP nodes, Guardian Nodes act like watchdogs. They continuously monitor network health, gather telemetry data, and optimize routing to ensure users get the fastest and most reliable data paths.
+守护节点位于 PoP 节点之上，充当看门狗的角色。它们持续监控网络健康状况，收集遥测数据，并优化路由以确保用户获得最快和最可靠的数据路径。
 
-## How it Works 🔍
+## 工作原理 🔍
 
-Guardian Nodes collect real-time metrics like latency, bandwidth, and uptime from PoP nodes.
-With these insights, they can reroute traffic dynamically to avoid bottlenecks, improving overall network performance. 🚀
+守护节点从 PoP 节点收集实时指标，如延迟、带宽和正常运行时间。
+通过这些洞察，它们可以动态地重新路由流量以避免瓶颈，从而提高整体网络性能。🚀
 
-## OKE its enough for that intro , lets dive into the code. I will show you how to deploy a simple Guardian Node using CLI BETA VERSION
+## 好了，介绍到此为止，让我们深入了解代码。我将展示如何使用 CLI BETA 版本部署一个简单的守护节点。
 
-## Features
+## 功能特性
 
-- **Register New Accounts**
-- **Login To Existing Accounts**
-- **Accounts Management**
-- **Support Multy Accounts**
-- **Support Proxy**
+- **注册新账户**
+- **登录现有账户**
+- **账户管理**
+- **支持多账户**
+- **支持代理**
 
-## Requirements
+## 环境要求
 
-- **Node.js**: Ensure you have Node.js installed. Recommended version: 20+
-- **Dependencies**: Install necessary dependencies with `npm install`.
+- **Node.js**: 确保已安装 Node.js。推荐版本：20+
+- **依赖项**: 使用 `npm install` 安装必要的依赖项。
 
-## File Structure
+## 文件结构
 
-- **account.json** it save your account info like email and password
-- **proxy.txt** to store proxy you want to use, each line for 1 proxy `http://username:pass@ip:port`
-- **token.json** it save access token after you login
+- **account.json** 保存账户信息，如邮箱和密码
+- **proxy.txt** 存储要使用的代理，每行一个代理 `http://用户名:密码@IP:端口`
+- **token.json** 登录后保存访问令牌
 
-## Setup
+## 购买代理
 
-1. Clone this repository:
+- 免费静态住宅代理：
+   - [WebShare](https://www.webshare.io/?referral_code=gtw7lwqqelgu)
+   - [ProxyScrape](https://proxyscrape.com/)
+   - [MonoSans](https://github.com/monosans/proxy-list)
+- 付费高级静态住宅代理：
+   - [922proxy](https://www.922proxy.com/register?inviter_code=d6416857)
+   - [Proxy-Cheap](https://app.proxy-cheap.com/r/Pd6sqg)
+   - [Infatica](https://dashboard.infatica.io/aff.php?aff=580)
+
+## 安装步骤
+
+1. 克隆本仓库：
    ```bash
-   git clone https://github.com/Zlkcyber/pipe-bot.git
-   cd pipe-bot
+   git clone https://github.com/0xbaiwan/pipe_bot.git
+   cd pipe_bot
    ```
-2. Install dependencies:
+2. 安装依赖：
    ```bash
    npm install
    ```
-3. Run The Script: Make sure you already fill proxy in proxy.txt before start the bot
+3. 运行脚本：在启动机器人之前，请确保已在 proxy.txt 中填写代理
    ```bash
    npm run start
    ```
-4. Follow the instructions in the terminal to complete the setup.
-   - choose 1 to register new account.
-   - you need login after you register accounts to get your access token.
-   - choose 2 to login to account.
-   - finally choose 3 to to run the bot.
-     ![banner](image.png)
+4. 按照终端中的说明完成设置。
+   - 选择 1 注册新账户。
+   - 注册账户后需要选择登录以获取访问令牌。
+   - 选择 2 登录账户。
+   - 最后选择 3 运行机器人。

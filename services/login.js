@@ -6,7 +6,7 @@ const fs = require('fs');
 
 const ACCOUNT_FILE = 'account.json';
 
-// Function to read all accounts from account.json
+// 从account.json读取所有账户
 async function readUsersFromFile() {
     try {
         const fileData = await fs.promises.readFile(ACCOUNT_FILE, 'utf8');
@@ -17,20 +17,23 @@ async function readUsersFromFile() {
     }
 }
 
-// Login function with proxy and added headers
+// 登录函数，使用代理和自定义headers
 async function login(email, password, API_BASE, proxy) {
     try {
-        const agent = new HttpsProxyAgent(proxy);
-
-        const response = await fetch(`${API_BASE}/api/login`, {
+        const options = {
             method: "POST",
             headers: {
                 ...headers,
                 "content-type": "application/json",
             },
             body: JSON.stringify({ email, password }),
-            agent,
-        });
+        };
+
+        if (proxy) {
+            options.agent = new HttpsProxyAgent(proxy);
+        }
+
+        const response = await fetch(`${API_BASE}/api/login`, options);
 
         if (response.ok) {
             const data = await response.json();
@@ -51,20 +54,19 @@ async function login(email, password, API_BASE, proxy) {
     }
 }
 
-// Function to login with all accounts and use proxies
+// 使用所有账户登录并使用代理
 async function loginWithAllAccounts(API_BASE) {
     const proxies = await loadProxies();
     const accounts = await readUsersFromFile();
 
-    if (proxies.length === 0) {
-        logger("No proxies available. Please check your proxy.txt file.", "error");
-        return;
-    }
-
     for (let i = 0; i < accounts.length; i++) {
         const account = accounts[i];
-        const proxy = proxies[i % proxies.length];
-        logger(`Attempting to login with ${account.email} using proxy ${proxy}`);
+        const proxy = proxies.length > 0 ? proxies[i % proxies.length] : null;
+        if (proxy) {
+            logger(`Attempting to login with ${account.email} using proxy ${proxy}`);
+        } else {
+            logger(`Attempting to login with ${account.email} without proxy`);
+        }
         await login(account.email, account.password, API_BASE, proxy);
     }
     logger('All accounts logged in successfully!');

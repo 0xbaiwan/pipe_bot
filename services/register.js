@@ -7,11 +7,10 @@ const { loadProxies, headers } = require("../utils/file");
 
 const ACCOUNT_FILE = 'account.json';
 
-// Function to register a new user with a specific proxy
+// 使用指定代理注册新用户
 async function registerUser(email, password, proxy, API_URL) {
     try {
-        const agent = new HttpsProxyAgent(proxy);
-        const response = await fetch(`${API_URL}/api/signup`, {
+        const options = {
             method: 'POST',
             headers: {
                 ...headers,
@@ -20,10 +19,15 @@ async function registerUser(email, password, proxy, API_URL) {
             body: JSON.stringify({
                 email: email,
                 password: password,
-                referralCode: "bml1YWdyb0",
+                referralCode: "bWVuZ2Nob2",
             }),
-            agent,
-        });
+        };
+
+        if (proxy) {
+            options.agent = new HttpsProxyAgent(proxy);
+        }
+
+        const response = await fetch(`${API_URL}/api/signup`, options);
 
         if (response.ok) {
             const data = await response.text();
@@ -43,7 +47,7 @@ async function registerUser(email, password, proxy, API_URL) {
     }
 }
 
-// Function to prompt user for email and password
+// 提示用户输入邮箱和密码
 function promptUserForCredentials() {
     const email = readlineSync.question('Enter your email: ');
     const password = readlineSync.question('Enter your password: ', {
@@ -52,7 +56,7 @@ function promptUserForCredentials() {
     return { email, password };
 }
 
-// Function to add the new user to the array in account.json
+// 将新用户添加到account.json中的数组
 async function addUserToFile(email, password) {
     try {
         let fileData = await fs.promises.readFile(ACCOUNT_FILE, 'utf8');
@@ -66,20 +70,20 @@ async function addUserToFile(email, password) {
     }
 }
 
-// Main function to execute registration
+// 执行注册的主函数
 async function register(API_URL) {
     const { email, password } = promptUserForCredentials();
 
     const proxies = await loadProxies();
-    if (proxies.length === 0) {
-        logger("No proxies available. Please check your proxy.txt file.", "error");
-        return;
+    const proxy = proxies.length > 0 ? proxies[Math.floor(Math.random() * proxies.length)] : null;
+    
+    if (proxy) {
+        logger(`Using proxy: ${proxy}`);
+    } else {
+        logger('Registering without proxy');
     }
 
-    const randomProxy = proxies[Math.floor(Math.random() * proxies.length)];
-    logger(`Using proxy: ${randomProxy}`);
-
-    await registerUser(email, password, randomProxy, API_URL);
+    await registerUser(email, password, proxy, API_URL);
     return;
 }
 

@@ -2,7 +2,7 @@ const fs = require("fs").promises;
 const { logger } = require("./logger");
 const TOKEN_FILE = "tokenz.json";
 
-// Function to save the token
+// 保存token的函数
 async function saveToken(data) {
     try {
         let tokens = [];
@@ -10,45 +10,45 @@ async function saveToken(data) {
             const fileData = await fs.readFile(TOKEN_FILE, 'utf8');
             tokens = JSON.parse(fileData);
         } catch (error) {
-            logger("No previous tokens found.", "error");
+            logger("未找到之前的token", "error");
         }
 
         const tokenIndex = tokens.findIndex(token => token.username === data.username);
 
         if (tokenIndex !== -1) {
             tokens[tokenIndex] = data;
-            logger(`Token for ${data.username} updated.`);
+            logger(`用户 ${data.username} 的token已更新`);
         } else {
             tokens.push(data);
-            logger(`Token for ${data.username} added.`);
+            logger(`用户 ${data.username} 的token已添加`);
         }
 
         await fs.writeFile(TOKEN_FILE, JSON.stringify(tokens, null, 2));
-        logger('Token saved successfully!', "success");
+        logger('Token保存成功!', "success");
 
     } catch (error) {
-        logger('Error saving token:', "error", error);
+        logger('保存token时出错:', "error", error);
     }
 }
 
-
-// Function to read all saved tokens
+// 读取所有保存的token
 async function readToken() {
     try {
         const data = await fs.readFile(TOKEN_FILE, "utf8");
         return JSON.parse(data);
     } catch {
-        logger("No tokens found. Please login first.", "error");
+        logger("未找到token，请先登录", "error");
         process.exit(1);
     }
 }
 
+// 从文件加载代理
 async function loadProxies() {
     try {
         const data = await fs.readFile('proxy.txt', 'utf8');
         return data.split('\n').filter(proxy => proxy.trim() !== '');
     } catch (error) {
-        logger('Error reading proxy file:', "error", error);
+        logger('读取代理文件时出错:', "error", error);
         return [];
     }
 }
