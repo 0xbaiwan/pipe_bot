@@ -1,17 +1,30 @@
 const chalk = require('chalk');
 
+// 日志级别对应的中文描述
+const logLevels = {
+    debug: "调试",
+    info: "信息",
+    warn: "警告", 
+    error: "错误",
+    success: "成功"
+};
+
+// 日志级别对应的颜色
+const logColors = {
+    debug: chalk.magenta,
+    info: chalk.green,
+    warn: chalk.yellow,
+    error: chalk.red,
+    success: chalk.blue
+};
+
 // 带颜色支持的日志记录函数
 function logger(message, level = 'info', value = "") {
     const now = new Date().toISOString();
-    const colors = {
-        info: chalk.green,    // 信息级别 - 绿色
-        warn: chalk.yellow,   // 警告级别 - 黄色
-        error: chalk.red,     // 错误级别 - 红色
-        success: chalk.blue,  // 成功级别 - 蓝色
-        debug: chalk.magenta, // 调试级别 - 洋红色
-    };
-    const color = colors[level] || chalk.white;
-    console.log(color(`[${now}] [${level.toUpperCase()}]: ${message}`), chalk.yellow(value));
+    const color = logColors[level] || chalk.white;
+    const levelText = logLevels[level] || level;
+    
+    console.log(color(`[${now}] [${levelText.toUpperCase()}]: ${message}`), chalk.yellow(value));
 }
 
 module.exports = { logger };
