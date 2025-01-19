@@ -3,7 +3,6 @@ const { readToken, loadProxies, headers } = require("../utils/file");
 const { HttpsProxyAgent } = require("https-proxy-agent");
 const { logger } = require("../utils/logger");
 
-
 // Function to fetch the base URL
 async function fetchBaseUrl(fallbackUrl) {
     logger('Fetching base URL...');
@@ -43,10 +42,7 @@ async function fetchWithRetry(url, options = {}, retries = 3, delay = 1000) {
 // Main function to run node tests
 async function runNodeTests(API_BASE) {
     const proxies = await loadProxies();
-    if (proxies.length === 0) {
-        logger("No proxies available. Please check your proxy.txt file.", "error");
-        return;
-    }
+    let agent = null;
 
     try {
         const tokens = await readToken();
@@ -57,10 +53,15 @@ async function runNodeTests(API_BASE) {
 
         for (let j = 0; j < tokens.length; j++) {
             const { token, username } = tokens[j];
-            const proxy = proxies[j % proxies.length];
-            const agent = new HttpsProxyAgent(proxy);
-
-            logger(`Fetching nodes for ${username} using proxy: ${proxy}`, "info");
+            
+            // 如果有代理则使用代理，否则直接连接
+            if (proxies.length > 0) {
+                const proxy = proxies[j % proxies.length];
+                agent = new HttpsProxyAgent(proxy);
+                logger(`Fetching nodes for ${username} using proxy: ${proxy}`, "info");
+            } else {
+                logger(`Fetching nodes for ${username} without proxy`, "info");
+            }
 
             const response = await fetch(`${API_BASE}/api/nodes`, {
                 headers: {
@@ -74,7 +75,7 @@ async function runNodeTests(API_BASE) {
             const nodes = await response.json();
 
             for (const node of nodes) {
-                logger(`Testing node ${node.node_id} using proxy: ${proxy}`, "info");
+                logger(`Testing node ${node.node_id}`, "info");
                 const latency = await testNodeLatency(node, agent);
 
                 logger(`Node ${node.node_id} (${node.ip}) latency: ${latency}ms`, latency > 0 ? "success" : "warn");
