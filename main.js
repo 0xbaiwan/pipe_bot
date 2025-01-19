@@ -46,16 +46,23 @@ async function ensureBaseUrl() {
             case "3":
                 baseUrl = await ensureBaseUrl();
                 logger("正在使用代理运行所有账户...");
+                
+                // 首次运行
                 await sendHeartbeat(baseUrl);
-                setInterval(() => sendHeartbeat(baseUrl), 6 * 60 * 60 * 1000); // Send heartbeat every 6 hours
                 await runNodeTests(baseUrl);
-                setInterval(() => runNodeTests(baseUrl), 30 * 60 * 1000); // Run Node tests every 30 minutes
-                logger(
-                    "心跳将每6小时发送一次，节点结果将每30分钟发送一次",
-                    "debug"
-                );
+                
+                // 设置定时任务
+                setInterval(() => sendHeartbeat(baseUrl), 6 * 60 * 60 * 1000); // 每6小时
+                setInterval(() => runNodeTests(baseUrl), 30 * 60 * 1000); // 每30分钟
+                
+                logger("程序已进入后台运行模式", "info");
+                logger("心跳将每6小时发送一次，节点结果将每30分钟发送一次", "debug");
                 logger("请不要修改此设置，否则您的账户可能会被封禁。", "debug");
-                break;
+                
+                // 保持程序运行但不返回主菜单
+                while (true) {
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                }
             case "4":
                 logger("程序退出。", "info");
                 process.exit(0);
